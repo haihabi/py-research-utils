@@ -107,7 +107,8 @@ class Logger:
         COLOR_FORMAT = formatter_message(FORMAT, True)
         formatter = ColoredFormatter(COLOR_FORMAT)
 
-        text_formatter = logging.Formatter('[%(asctime)s][%(name)-20s][%(levelname)-18s]  %(message)s (%(filename)s:%(lineno)d)')
+        text_formatter = logging.Formatter(
+            '[%(asctime)s][%(name)-20s][%(levelname)-18s]  %(message)s (%(filename)s:%(lineno)d)')
 
         Logger.LOG_PATH = os.path.join(log_folder)
         log_name = os.path.join(Logger.LOG_PATH, f'research_logs_{ts}.log')
