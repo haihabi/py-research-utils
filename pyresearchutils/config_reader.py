@@ -2,9 +2,7 @@ import argparse
 from argparse import Namespace
 import os
 import json
-import copy
-
-CONFIG = "config_file"
+from pyresearchutils import constants
 
 
 class ConfigReader(object):
@@ -14,8 +12,8 @@ class ConfigReader(object):
         self.parameters = None
 
     def add_parameter(self, name, **kwargs):
-        if name == CONFIG:
-            raise Exception(f"Cant user the argument named:{CONFIG}")
+        if name == constants.CONFIG:
+            raise Exception(f"Cant user the argument named:{constants.CONFIG}")
         if kwargs.get('enum'):
             self.enum_dict[name] = kwargs.get('enum')
             kwargs.pop('enum')
@@ -42,19 +40,20 @@ class ConfigReader(object):
         return input_dict
 
     def get_user_arguments(self):
-        lcfg = self.load_config()  # Load Config from file
-        argparser = argparse.ArgumentParser()
-        for k, v in self.arg_dict.items():
-            argparser.add_argument('--' + k, **v)
-        parameters, _ = argparser.parse_known_args()
-        parameters_dict = vars(parameters)
-        for pname, pvalue in self.arg_dict.items():
-            if parameters.__getattribute__(pname) == pvalue["default"] and lcfg.get(
-                    pname) is not None:  # Same as defulat
-                parameters_dict[pname] = lcfg.get(pname)
-        self._handle_enums(parameters_dict)
-        self._handle_boolean(parameters_dict)
-        self.parameters = Namespace(**parameters_dict)
+        if self.parameters is None:
+            lcfg = self.load_config()  # Load Config from file
+            argparser = argparse.ArgumentParser()
+            for k, v in self.arg_dict.items():
+                argparser.add_argument('--' + k, **v)
+            parameters, _ = argparser.parse_known_args()
+            parameters_dict = vars(parameters)
+            for pname, pvalue in self.arg_dict.items():
+                if parameters.__getattribute__(pname) == pvalue["default"] and lcfg.get(
+                        pname) is not None:  # Same as defulat
+                    parameters_dict[pname] = lcfg.get(pname)
+            self._handle_enums(parameters_dict)
+            self._handle_boolean(parameters_dict)
+            self.parameters = Namespace(**parameters_dict)
         return self.parameters
 
     def save_config(self, folder):
@@ -66,11 +65,18 @@ class ConfigReader(object):
 
     def load_config(self):
         argparser = argparse.ArgumentParser()
-        argparser.add_argument('--' + CONFIG, type=str, required=False)
+        argparser.add_argument('--' + constants.CONFIG, type=str, required=False)
         config_args, _ = argparser.parse_known_args()
-        config_file = config_args.__getattribute__(CONFIG)
-        if config_args.__getattribute__(CONFIG) is None:
+        config_file = config_args.__getattribute__(constants.CONFIG)
+        if config_args.__getattribute__(constants.CONFIG) is None:
             return {}
         with open(config_file, 'r') as outfile:
             cfg = json.load(outfile)
         return cfg
+
+
+def initialized_config_reader(default_base_log_folder=None):
+    cr = ConfigReader()
+    cr.add_parameter(constants.BASELOGFOLDER, default=default_base_log_folder, type=str)
+    cr.add_parameter(constants.SEED, default=0, type=int)
+    return cr

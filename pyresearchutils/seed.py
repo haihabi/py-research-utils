@@ -1,6 +1,7 @@
 import random
 
 import numpy as np
+from pyresearchutils.logger import info
 
 
 def set_seed(seed: int = 0):
@@ -8,4 +9,4 @@ def set_seed(seed: int = 0):
     torch.manual_seed(seed)
     random.seed(seed)
     np.random.seed(seed)
-    print(f"Setting Random Seed to {seed}")
+    info(f"Setting Random Seed to {seed}")

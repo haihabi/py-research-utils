@@ -16,13 +16,23 @@ class MetricAveraging(object):
     def __init__(self):
         self.metric_dict = dict()
 
+    def clear(self):
+        self.metric_dict.clear()
+
+    def results_str(self):
+        # res=self.result
+        temp_str = ""
+        for k, v in self.result.items():
+            temp_str += k + f"={v}, "
+        return temp_str
+
     def _get_current_metric(self, name) -> SingleMetricAveraging:
         if self.metric_dict.get(name) is None:
             self.metric_dict.update({name: SingleMetricAveraging()})
         return self.metric_dict[name]
 
-    def update_metrics(self, results_dict):
-        for k, v in results_dict.items():
+    def log(self, **kwargs):
+        for k, v in kwargs.items():
             smv = self._get_current_metric(k)
             if isinstance(v, (tuple, list)):
                 if len(v) == 2:
