@@ -9,3 +9,5 @@ from pyresearchutils import logger
 from pyresearchutils.initlized_log import initialized_log
 from pyresearchutils import signal_processing
 from pyresearchutils.metric_averaging import MetricAveraging
+from pyresearchutils.timing import tic, toc
+from pyresearchutils.seed import set_seed

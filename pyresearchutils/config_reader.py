@@ -2,6 +2,9 @@ import argparse
 from argparse import Namespace
 import os
 import json
+
+import copy
+
 from pyresearchutils import constants
 
 
@@ -51,13 +54,14 @@ class ConfigReader(object):
                 if parameters.__getattribute__(pname) == pvalue["default"] and lcfg.get(
                         pname) is not None:  # Same as defulat
                     parameters_dict[pname] = lcfg.get(pname)
-            self._handle_enums(parameters_dict)
+            parameters_dict = self._handle_enums(parameters_dict)
             self._handle_boolean(parameters_dict)
             self.parameters = Namespace(**parameters_dict)
         return self.parameters
 
     def save_config(self, folder):
         args = self.get_user_arguments()
+        args = copy.deepcopy(args)
         args_dict = vars(args)
         args_dict = self._handle_enums2str(args_dict)
         with open(os.path.join(folder, 'run.config.json'), 'w') as outfile:

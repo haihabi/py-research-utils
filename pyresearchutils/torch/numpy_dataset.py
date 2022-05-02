@@ -9,6 +9,9 @@ class NumpyDataset(Dataset):
         self.transform = transform
         self.n = len(data)
 
+    def set_transform(self, transform):
+        self.transform = transform
+
     def __getitem__(self, index):
         d = self.data[index]
         if self.transform is not None:
