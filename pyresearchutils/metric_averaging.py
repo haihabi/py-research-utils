@@ -1,22 +1,43 @@
+from typing import Dict
+
+import numpy as np
+
+
+class IsBest(object):
+    def __init__(self):
+        self.min_value = np.inf
+        self.max_value = -np.inf
+
+    def update_value(self, value: float):
+        self.min_value = np.minimum(value, self.min_value)
+        self.max_value = np.maximum(value, self.max_value)
+
+    def is_best(self, value) -> bool:
+        # TODO: add maximal best
+        return value <= self.max_value
+
+
 class SingleMetricAveraging(object):
     def __init__(self):
-        self.n = 0
-        self.accumulator = 0
+        self.n: int = 0
+        self.accumulator: float = 0
 
-    def update_metric(self, value, n=1):
+    def update_metric(self, value: float, n: int = 1):
         self.accumulator += value
         self.n += n
 
     @property
-    def result(self):
+    def result(self) -> float:
         return self.accumulator / self.n
 
 
 class MetricAveraging(object):
     def __init__(self):
-        self.metric_dict = dict()
+        self.metric_dict: Dict[str, SingleMetricAveraging] = dict()
+        self.best_dict: Dict[str, IsBest] = dict()
 
     def clear(self):
+        self.update_best(self.result)
         self.metric_dict.clear()
 
     def results_str(self):
@@ -47,3 +68,15 @@ class MetricAveraging(object):
     @property
     def result(self) -> dict:
         return {k: v.result for k, v in self.metric_dict.items()}
+
+    def update_best(self, results_dict: dict):
+        for k, v in results_dict.items():
+            if self.best_dict.get(k) is None:
+                self.best_dict[k] = IsBest()
+            self.best_dict[k].update_value(v)
+
+    def is_best(self, name) -> bool:
+        if len(self.best_dict) == 0:
+            return True
+        v = self.result[name]
+        return self.best_dict[name].is_best(v)
