@@ -11,5 +11,6 @@ from pyresearchutils import signal_processing
 from pyresearchutils.metric_averaging import MetricAveraging
 from pyresearchutils.timing import tic, toc
 from pyresearchutils.seed import set_seed
+from pyresearchutils.timing import tic, toc
 
 __version__ = "0.1.0"
