@@ -7,14 +7,31 @@ class IsBest(object):
     def __init__(self):
         self.min_value = np.inf
         self.max_value = -np.inf
+        self.is_last_best = False
 
     def update_value(self, value: float):
+        """
+        Update the last best, min value and max value using the current value.
+        Args:
+            value: A floating point value.
+
+        Returns: None
+
+        """
+        self.is_last_best = self.is_best(value) # Update last best
         self.min_value = np.minimum(value, self.min_value)
         self.max_value = np.maximum(value, self.max_value)
 
     def is_best(self, value) -> bool:
-        # TODO: add maximal best
-        return value <= self.max_value
+        """
+        This function check a given value is best.
+        Args:
+            value: A floating point value.
+
+        Returns: a boolean stating it this is the best results so far.
+
+        """
+        return value <= self.min_value
 
 
 class SingleMetricAveraging(object):
@@ -78,5 +95,4 @@ class MetricAveraging(object):
     def is_best(self, name) -> bool:
         if len(self.best_dict) == 0:
             return True
-        v = self.result[name]
-        return self.best_dict[name].is_best(v)
+        return self.best_dict[name].is_last_best

@@ -1,14 +1,17 @@
 import torch
+from typing import Any
 
+def change2tensor(x:Any)->torch.Tensor:
+    """
 
-def change2tensor(x):
+    Args:
+        x:
+
+    Returns:
+
+    """
     if isinstance(x, torch.Tensor):  # If is tensor return
         return x
     if isinstance(x, (float, int)):  # Change float to tensor
         x = [x]
     return torch.Tensor(x)
-
-
-def add_batch(x: torch.Tensor):
-    # TODO:finish function
-    raise NotImplemented

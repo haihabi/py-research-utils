@@ -3,6 +3,15 @@ from matplotlib import pyplot as plt
 
 
 def plot_spectrum(x: np.ndarray, eps: float = 1e-7):
+    """
+
+    Args:
+        x:
+        eps:
+
+    Returns: None
+
+    """
     assert len(x.shape) == 1
     x_fft = np.fft.fft(x)
     x_fft_abs = np.abs(x_fft)

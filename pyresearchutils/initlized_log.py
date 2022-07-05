@@ -1,14 +1,28 @@
 import os
-import wandb
+
 from pyresearchutils import logger
 from pyresearchutils.seed import set_seed
 from pyresearchutils.log_folder import generate_log_folder
 from pyresearchutils.config_reader import ConfigReader
 from pyresearchutils import constants
+if constants.FOUND_WANDB:
+    import wandb
+else:
+    wandb=None
 
 
 def initialized_log(project_name: str, config_reader: ConfigReader = None,
                     enable_wandb: bool = False):
+    """
+
+    Args:
+        project_name:
+        config_reader:
+        enable_wandb:
+
+    Returns:
+
+    """
     args = config_reader.get_user_arguments()
 
     os.makedirs(args.base_log_folder, exist_ok=True)
@@ -19,7 +33,7 @@ def initialized_log(project_name: str, config_reader: ConfigReader = None,
     if config_reader is not None:
         config_reader.save_config(run_log_dir)
     logger.info(f"Log Folder Set to {run_log_dir}")
-    if enable_wandb:
+    if constants.FOUND_WANDB and enable_wandb:
         wandb.init(project=project_name, dir=args.base_log_folder)  # Set WandB Folder to log folder
         wandb.config.update(config_reader.get_user_arguments())  # adds all of the arguments as config variables®
     if constants.FOUND_PYTORCH:

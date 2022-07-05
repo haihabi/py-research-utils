@@ -8,6 +8,15 @@ import copy
 from pyresearchutils import constants
 
 
+def _handle_boolean(input_dict):
+    for name, c in input_dict.items():
+        if isinstance(c, str):
+            if c.lower() == "true":
+                input_dict[name] = True
+            if c.lower() == "false":
+                input_dict[name] = False
+
+
 class ConfigReader(object):
     def __init__(self):
         self.arg_dict = dict()
@@ -27,16 +36,6 @@ class ConfigReader(object):
             input_dict[name] = c[input_dict[name]]
         return input_dict
 
-    def _handle_boolean(self, input_dict):
-        # output_dict = copy.copy(input_dict)
-        for name, c in input_dict.items():
-            if isinstance(c, str):
-                if c.lower() == "true":
-                    input_dict[name] = True
-                if c.lower() == "false":
-                    input_dict[name] = False
-        # return output_dict
-
     def _handle_enums2str(self, input_dict):
         for name, c in self.enum_dict.items():
             input_dict[name] = input_dict[name].name
@@ -55,7 +54,7 @@ class ConfigReader(object):
                         pname) is not None:  # Same as defulat
                     parameters_dict[pname] = lcfg.get(pname)
             parameters_dict = self._handle_enums(parameters_dict)
-            self._handle_boolean(parameters_dict)
+            _handle_boolean(parameters_dict)
             self.parameters = Namespace(**parameters_dict)
         return self.parameters
 

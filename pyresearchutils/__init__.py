@@ -13,4 +13,4 @@ from pyresearchutils.timing import tic, toc
 from pyresearchutils.seed import set_seed
 from pyresearchutils.timing import tic, toc
 
-__version__ = "0.1.0"
+__version__ = "0.2.0"
