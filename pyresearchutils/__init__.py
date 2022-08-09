@@ -12,5 +12,6 @@ from pyresearchutils.metric_averaging import MetricAveraging
 from pyresearchutils.timing import tic, toc
 from pyresearchutils.seed import set_seed
 from pyresearchutils.timing import tic, toc
+from pyresearchutils.metric_collector import MetricCollector
 
 __version__ = "0.2.0"
