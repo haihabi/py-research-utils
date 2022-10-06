@@ -1,7 +1,9 @@
 import torch
+import numpy as np
 from typing import Any
 
-def change2tensor(x:Any)->torch.Tensor:
+
+def change2torch(x: Any) -> torch.Tensor:
     """
 
     Args:
@@ -15,3 +17,7 @@ def change2tensor(x:Any)->torch.Tensor:
     if isinstance(x, (float, int)):  # Change float to tensor
         x = [x]
     return torch.Tensor(x)
+
+
+def torch2numpy(x: torch.Tensor) -> np.ndarray:
+    return x.detach().cpu().numpy()

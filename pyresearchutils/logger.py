@@ -54,6 +54,7 @@ class Logger:
     }
     LOG_PATH = None
     LOG_FILE = None
+    LOG_WARNING = None
     CONSOLE = None
 
     @staticmethod
@@ -90,6 +91,19 @@ class Logger:
         return logging.getLogger(LOGGER_NAME)
 
     @staticmethod
+    def set_logger():
+        logger = Logger.get_logger()
+        FORMAT = "[%(asctime)s][$BOLD%(name)-20s$RESET][%(levelname)-18s]  %(message)s ($BOLD%(filename)s$RESET:%(lineno)d)"
+        COLOR_FORMAT = formatter_message(FORMAT, True)
+        formatter = ColoredFormatter(COLOR_FORMAT)
+
+        ch = logging.StreamHandler()
+        ch.setLevel(logging.INFO)
+        ch.setFormatter(formatter)
+        logger.addHandler(ch)
+        Logger.CONSOLE = ch
+
+    @staticmethod
     def set_log_file(log_folder: str = None):
         """
         Setting the logger log file path. The method gets the folder for the log file.
@@ -100,15 +114,9 @@ class Logger:
         """
 
         logger = Logger.get_logger()
-
-        ts = datetime.now(tz=None).strftime("%d%m%Y_%H%M%S")
-
-        FORMAT = "[%(asctime)s][$BOLD%(name)-20s$RESET][%(levelname)-18s]  %(message)s ($BOLD%(filename)s$RESET:%(lineno)d)"
-        COLOR_FORMAT = formatter_message(FORMAT, True)
-        formatter = ColoredFormatter(COLOR_FORMAT)
-
         text_formatter = logging.Formatter(
             '[%(asctime)s][%(name)-20s][%(levelname)-18s]  %(message)s (%(filename)s:%(lineno)d)')
+        ts = datetime.now(tz=None).strftime("%d%m%Y_%H%M%S")
 
         Logger.LOG_PATH = os.path.join(log_folder)
         log_name = os.path.join(Logger.LOG_PATH, f'research_logs_{ts}.log')
@@ -120,12 +128,7 @@ class Logger:
         fh.setFormatter(text_formatter)
         logger.addHandler(fh)
 
-        ch = logging.StreamHandler()
-        ch.setLevel(logging.INFO)
-        ch.setFormatter(formatter)
-        logger.addHandler(ch)
         Logger.LOG_FILE = log_name
-        Logger.CONSOLE = ch
 
 
 def set_log_folder(folder: str, level: int = logging.INFO):
@@ -137,6 +140,7 @@ def set_log_folder(folder: str, level: int = logging.INFO):
         level: Level of verbosity to set to the logger.
 
     """
+    Logger.set_logger()
     Logger.set_log_file(folder)
     Logger.set_logger_level(level)
 
@@ -145,11 +149,24 @@ def get_log_file():
     return Logger.LOG_FILE
 
 
+def get_log_warning_status():
+    return Logger.LOG_WARNING
+
+
+def disable_folder_warning():
+    """
+    Set a directory path for saving a log file.
+
+
+    """
+    Logger.set_logger()
+    Logger.LOG_WARNING = False
+
+
 def check_logger_path():
-    if get_log_file() is None:
-        logger_path = os.getcwd()
-        set_log_folder(logger_path)
-        warning(f"Logger is set automatically to {logger_path}")
+    if get_log_warning_status() is None:
+        disable_folder_warning()
+        warning(f"Logger folder is not set")
 
 
 ########################################
