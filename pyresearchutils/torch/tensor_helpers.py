@@ -1,6 +1,7 @@
 import torch
 import numpy as np
 from typing import Any
+from pyresearchutils.torch.working_device import get_working_device
 
 
 def change2torch(x: Any) -> torch.Tensor:
@@ -16,7 +17,7 @@ def change2torch(x: Any) -> torch.Tensor:
         return x
     if isinstance(x, (float, int)):  # Change float to tensor
         x = [x]
-    return torch.Tensor(x)
+    return torch.Tensor(x).to(get_working_device())
 
 
 def torch2numpy(x: torch.Tensor) -> np.ndarray:
