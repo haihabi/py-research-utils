@@ -133,3 +133,5 @@ dmypy.json
 .idea/inspectionProfiles/Project_Default.xml
 .idea/inspectionProfiles/profiles_settings.xml
 .idea/encodings.xml
+.idea/misc.xml
+.idea/vcs.xml
