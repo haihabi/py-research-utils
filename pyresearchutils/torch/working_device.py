@@ -1,3 +1,5 @@
+from typing import List
+
 import torch
 from pyresearchutils.logger import info
 from pyresearchutils import constants
@@ -13,5 +15,5 @@ def get_working_device():
         return constants.DEVICE
 
 
-def update_device(x: torch.Tensor) -> torch.Tensor:
-    return x.to(get_working_device())
+def update_device(*args) -> List:
+    return [a.to(get_working_device()) for a in args]
