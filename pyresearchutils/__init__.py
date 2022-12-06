@@ -2,7 +2,7 @@ from pyresearchutils.config_reader import ConfigReader, initialized_config_reade
 from pyresearchutils import constants
 
 if constants.FOUND_PYTORCH:
-    from pyresearchutils.torch.working_device import get_working_device
+    from pyresearchutils.torch.working_device import get_working_device, update_device
     from pyresearchutils.torch.numpy_dataset import NumpyDataset
     from pyresearchutils.torch.tensor_helpers import torch2numpy, change2torch
 
