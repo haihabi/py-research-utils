@@ -77,6 +77,17 @@ class ConfigReader(object):
             cfg = json.load(outfile)
         return cfg
 
+    def decode_run_parameters(self, in_dict):
+        new_dict = {}
+        for k, v in self.arg_dict.items():
+            if in_dict.get(k) is None:
+                new_dict.update({k: v})
+            else:
+                new_dict.update({k: in_dict.get(k)})
+            if self.enum_dict.get(k) is not None:
+                new_dict[k] = new_dict[k].split(".")[-1]
+        return Namespace(**self._handle_enums(new_dict))
+
 
 def initialized_config_reader(default_base_log_folder=None):
     cr = ConfigReader()
