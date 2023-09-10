@@ -80,6 +80,8 @@ class ConfigReader(object):
     def decode_run_parameters(self, in_dict):
         new_dict = {}
         for k, v in self.arg_dict.items():
+            if isinstance(v, dict):
+                v = v["default"]
             if in_dict.get(k) is None:
                 new_dict.update({k: v})
             else:
