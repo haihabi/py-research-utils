@@ -31,6 +31,10 @@ class ConfigReader(object):
             kwargs.pop('enum')
         self.arg_dict.update({name: kwargs})
 
+    def notebook_parameters(self, **kwargs):
+        self.get_user_arguments()
+        return self.parameters
+
     def _handle_enums(self, input_dict):
         for name, c in self.enum_dict.items():
             input_dict[name] = c[input_dict[name]]

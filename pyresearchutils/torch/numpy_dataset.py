@@ -3,16 +3,18 @@ from torch.utils.data.dataset import Dataset
 
 
 class NumpyDataset(Dataset):
-    def __init__(self, data, label, transform):
+    def __init__(self, data, label, transform, extend=None):
         self.data = data
         self.label = label
         self.transform = transform
         self.n = len(data)
+        self.extend = extend
 
     def set_transform(self, transform):
         self.transform = transform
 
     def __getitem__(self, index):
+        index = index % self.n
         d = self.data[index]
         if self.transform is not None:
             d = self.transform(d)
@@ -20,7 +22,7 @@ class NumpyDataset(Dataset):
         return d, l
 
     def __len__(self):
-        return self.n
+        return self.n if self.extend is None else self.extend
 
     def get_min_max_vector(self):
         x = np.stack(self.data)
