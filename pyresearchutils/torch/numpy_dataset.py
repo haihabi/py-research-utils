@@ -3,9 +3,10 @@ from torch.utils.data.dataset import Dataset
 
 
 class NumpyDataset(Dataset):
-    def __init__(self, data, label, transform, extend=None):
+    def __init__(self, data, label, transform, metadata=None, extend=None):
         self.data = data
         self.label = label
+        self.metadata = metadata
         self.transform = transform
         self.n = len(data)
         self.extend = extend
@@ -19,7 +20,10 @@ class NumpyDataset(Dataset):
         if self.transform is not None:
             d = self.transform(d)
         l = self.label[index]
-        return d, l
+        if self.metadata is None:
+            return d, l
+        else:
+            return d, l, self.metadata[index]
 
     def __len__(self):
         return self.n if self.extend is None else self.extend
