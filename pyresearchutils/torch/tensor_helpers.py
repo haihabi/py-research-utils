@@ -17,7 +17,7 @@ def change2torch(x: Any) -> torch.Tensor:
         return x
     if isinstance(x, (float, int)):  # Change float to tensor
         x = [x]
-    return torch.Tensor(x).to(get_working_device())
+    return torch.tensor(x).to(get_working_device())
 
 
 def torch2numpy(x: torch.Tensor) -> np.ndarray:
