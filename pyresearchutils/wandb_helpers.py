@@ -10,7 +10,7 @@ def load_run(in_run_name, in_project_name, in_user_name, in_cr: ConfigReader):
     runs = api.runs(f"{in_user_name}/{in_project_name}")
     for run in runs:
         if run.name == in_run_name:
-            return in_cr.decode_run_parameters(experiments.config.config), run
+            return in_cr.decode_run_parameters(run.config), run
     return None, None
 
 
