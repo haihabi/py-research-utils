@@ -16,6 +16,5 @@ from pyresearchutils.metric_lister import MetricLister
 from pyresearchutils.timing import tic, toc
 from pyresearchutils.seed import set_seed
 from pyresearchutils.timing import tic, toc
-from pyresearchutils.metric_collector import MetricCollector
 
 __version__ = "0.2.1"
