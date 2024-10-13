@@ -40,7 +40,7 @@ def initialized_log(project_name: str, config_reader: ConfigReader = None,
         wandb.init(project=project_name,
                    dir=args.base_log_folder if config_reader is not None else None)  # Set WandB Folder to log folder
         if config_reader is not None:
-            wandb.config.update(config_reader.get_user_arguments())  # adds all of the arguments as config variables®
+            wandb.config.update(args)  # adds all of the arguments as config variables®
     if constants.FOUND_PYTORCH:
         from pyresearchutils.torch.working_device import get_working_device
         constants.DEVICE = get_working_device()
